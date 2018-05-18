@@ -7,26 +7,15 @@ networks:
 
 services:
 
-  rc-php-http-dispatcher:
+  rc-amqp-http-dispatcher:
     build:
       context: .
       dockerfile: Dockerfile.dev
     volumes:
       - ./:/app
     environment:
-      - RABBITMQ_HOST=rabbitmq
-      - RABBITMQ_USER=rabbitmq
-      - RABBITMQ_PASS=rabbitmq
+      RABBITMQ_HOST: rabbitmq
+      BACKEND_HOST: rc-backend
+      BACKEND_SECRET: secret
     ports:
-      - 8000:80
-
-  rabbitmq:
-    image: "rabbitmq:3-management"
-    environment:
-      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
-      RABBITMQ_DEFAULT_USER: "rabbitmq"
-      RABBITMQ_DEFAULT_PASS: "rabbitmq"
-      RABBITMQ_DEFAULT_VHOST: "/"
-    ports:
-      - "15672:15672"
-      - "5672:5672"
+      - 8005:80

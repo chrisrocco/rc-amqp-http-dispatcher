@@ -9,8 +9,10 @@ export let getChannel = () => rabbitChannel
 
 // Run when bootstrapping the application
 export let createRabbitMQConnection = async ({ host, user, pass }) => {
-    rabbitConnection = await amqp.connect(`amqp://${user}:${pass}@${host}`)
+    let auth = ''
+    if(user == null || pass == null) auth = user + ':' + pass + '@'
+
+    rabbitConnection = await amqp.connect(`amqp://${auth}${host}`)
     rabbitChannel = await rabbitConnection.createChannel()
-    app.emit('rabbitmq-ready', { rabbitConnection, rabbitChannel })
-    return rabbitChannel
+    app.emit('rabbitmq-ready')
 }
